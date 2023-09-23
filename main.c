@@ -176,7 +176,7 @@ int main()
 
         }
     }
-    //laço agora para formar a imagem escondida a partir de seus bits
+    //laço agora para formar a imagemm escondida a partir de seus bits
     
     Img dataDecodificada;
     Img *imageDecodificada = &dataDecodificada;
