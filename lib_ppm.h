@@ -14,6 +14,11 @@ typedef struct {
     Pixel *pix;
 } Img;
 
+typedef struct {
+    unsigned int valor : 2;
+} valor1Bit;
+
+
 int read_ppm(char *file, Img *image);
 int write_ppm(char *file, Img *image);
 int new_ppm(Img* image, int width, int height);
