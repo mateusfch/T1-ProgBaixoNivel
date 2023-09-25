@@ -11,9 +11,10 @@ int main()
     Img *imageH = &dataH;
     int rh;
 
+    printf("MDS");
 
-    rh = read_ppm("SmallImage.ppm", imageH);
-    r = read_ppm("BigImage.ppm", image);
+    rh = read_ppm("british_summer.ppm", imageH);
+    r = read_ppm("earth.ppm", image);
 
     short int larguraImgMenor = imageH->width;
     //101010101010
@@ -114,123 +115,190 @@ int main()
                 }
                 
             }
-            write_ppm("novas.ppm", image);
-            free_ppm(image);
+
         }
+        write_ppm("codificada.ppm", image);
+        //free_ppm(image);
     }
+
+
+
+    Img dataCodificada;
+    Img *imageCodificada = &dataCodificada;
+    //int rCodificada = read_ppm("codificada.ppm", imageCodificada);
+
+ 
+
+
+    // PARA PEGAR TAMANHO DA IMG MENOR A PARTIR DA IMG CODIFICADA
+    // short int larguraNova, alturaNova;
+   
+    // short int larguraImgDecodificada, l1, l2, l3,l4,l5,l6;
+    
+    // l1 = imageCodificada->pix[0 * image->width + 0].r & 0b000000000011 << 10;
+    // l2 = (imageCodificada->pix[0 * image->width + 1].g & 0b000000000011 << 8) || 0b110000000000;
+    // l3 = (imageCodificada->pix[0 * image->width + 2].g & 0b000000000011 << 6) || 0b111100000000;
+    // l4 = (imageCodificada->pix[0 * image->width + 3].g & 0b000000000011 << 4) || 0b111111000000;
+
+
+    // primeiro coloca em 12 bits os 2 menos significativos, depois faz o shift junto com um OR que garante que os anteriores não zerem a máscara
+
+
+     
+    // larguraNova = (image->pix[0 * image->width + 0].b & 0b00000011) << 10;
+    // larguraNova = larguraNova & (image->pix[0 * image->width + 0].b & 0b00000011) << 8;
+    // larguraNova += (image->pix[0 * image->width + 0].b & 0b00000011) << 6;
+
+    // larguraNova += (image->pix[0 * image->width + 0].b & 0b00000011) << 10;
+    // larguraNova += (image->pix[0 * image->width + 0].b & 0b00000011) << 8;
+    // larguraNova += (image->pix[0 * image->width + 0].b & 0b00000011) << 6;
+
+   
+    // larguraNova += (image->pix[0 * image->width + 1].b & 0b00000011) << 4;
+    // larguraNova += (image->pix[0 * image->width + 1].b & 0b00000011) << 2;
+    // larguraNova += (image->pix[0 * image->width + 1].b & 0b00000011);
+
+    // printf("%d", larguraNova);
+    
+    // alturaNova += (image->pix[0 * image->width + 2].b & 0b00000011) << 10;
+    // alturaNova += (image->pix[0 * image->width + 2].b & 0b00000011) << 8;
+    // alturaNova += (image->pix[0 * image->width + 2].b & 0b00000011) << 6;
+
+   
+    // alturaNova += (image->pix[0 * image->width + 3].b & 0b00000011) << 4;
+    // alturaNova += (image->pix[0 * image->width + 3].b & 0b00000011) << 2;
+    // alturaNova += (image->pix[0 * image->width + 3].b & 0b00000011);
 
 
    
     char bitsImgDecodificada [imageH->width * imageH->height * 3];
-        // 2 primeiros pra largura
-    int larguraNova, alturaNova;
+    
     int countDecodifica = 0;
-    for(j=0; j<imageH->height*4; j++){
-        for(i=0; i<imageH->width*4; i++){
-            if(j==0 && i==0){
-                larguraNova = image->pix[j * image->width + i].r & 0b00000011;
-                larguraNova += image->pix[j * image->width + i].g & 0b00000011;
-                larguraNova += image->pix[j * image->width + i].b & 0b00000011;
-            }
-            
-            else if (j==0 && i==1)
-            {
-                larguraNova += image->pix[j * image->width + i].r & 0b00000011;
-                larguraNova += image->pix[j * image->width + i].g & 0b00000011; 
-                larguraNova += image->pix[j * image->width + i].b & 0b00000011;
-            }
-            else if(j==0 && i==2){
-                alturaNova = image->pix[j * image->width + i].r & 0b00000011;
-                alturaNova += image->pix[j * image->width + i].g & 0b00000011;
-                alturaNova += image->pix[j * image->width + i].b & 0b00000011;
-            }
-            
-            else if (j==0 && i==3)
-            {
-                alturaNova += image->pix[j * image->width + i].r & 0b00000011;
-                alturaNova += image->pix[j * image->width + i].g & 0b00000011;
-                alturaNova += image->pix[j * image->width + i].b & 0b00000011;
-            }
+
+    int quantidadePixelsPequena = larguraImgMenor * alturaImgMenor;
 
 
-            else{
-                valor1Bit red, green, blue, red2, green2, blue2;
-                
-                red.valor = image->pix[j * image->width + i].r & 0b00000010;
-                red2.valor = image->pix[j * image->width + i].r & 0b00000001;                
-                bitsImgDecodificada[countDecodifica] = red.valor;
-                bitsImgDecodificada[countDecodifica+1] = red2.valor;
-
-                green.valor = image->pix[j * image->width + i].g & 0b00000010;
-                green2.valor = image->pix[j * image->width + i].g & 0b00000001;                
-                bitsImgDecodificada[countDecodifica+2] = green.valor;
-                bitsImgDecodificada[countDecodifica+3] = green2.valor;
-
-                blue.valor = image->pix[j * image->width + i].b & 0b00000010;
-                blue2.valor = image->pix[j * image->width + i].b & 0b00000001;                
-                bitsImgDecodificada[countDecodifica+4] = blue.valor;
-                bitsImgDecodificada[countDecodifica+5] = blue2.valor;
-
-                countDecodifica = countDecodifica+6;
-            }
-
+    j = 0;
+    for(i=0; i<quantidadePixelsPequena; i++){
+        if(i == image->width){
+            j++;
         }
+                       
+        bitsImgDecodificada[countDecodifica] = image->pix[i].r & 0b00000011;         
+        bitsImgDecodificada[countDecodifica+1] = image->pix[i].g & 0b00000011;
+        bitsImgDecodificada[countDecodifica+2] = image->pix[i].b & 0b00000011;
+
+        countDecodifica = countDecodifica+3; 
+   
     }
+    printf("ooooooo");
+            
+  
+//   for(i=0; i<2; i++){
+//         if(i == image->width){
+//             j++;
+//         }
+
+//         valor1Bit red, green, blue, red2, green2, blue2;
+                
+//         red.valor = (image->pix[j * image->width + i].r & 0b00000010) >> 1;
+//         red2.valor = image->pix[j * image->width + i].r & 0b00000001;                
+//         bitsImgDecodificada[countDecodifica] = red.valor;
+//         bitsImgDecodificada[countDecodifica+1] = red2.valor;
+        
+//         green.valor = (image->pix[j * image->width + i].g & 0b00000010) >> 1;
+//         green2.valor = image->pix[j * image->width + i].g & 0b00000001;                
+//         bitsImgDecodificada[countDecodifica+2] = green.valor;
+//         bitsImgDecodificada[countDecodifica+3] = green2.valor;
+
+//         blue.valor = (image->pix[j * image->width + i].b & 0b00000010)>> 1;
+//         blue2.valor = image->pix[j * image->width + i].b & 0b00000001;                
+//         bitsImgDecodificada[countDecodifica+4] = blue.valor;
+//         bitsImgDecodificada[countDecodifica+5] = blue2.valor;
+
+//         countDecodifica = countDecodifica+6; 
+            
+//     }
+
+    //         else{
+    //             valor1Bit red, green, blue, red2, green2, blue2;
+                
+    //             red.valor = image->pix[j * image->width + i].r & 0b00000010;
+    //             red2.valor = image->pix[j * image->width + i].r & 0b00000001;                
+    //             bitsImgDecodificada[countDecodifica] = red.valor;
+    //             bitsImgDecodificada[countDecodifica+1] = red2.valor;
+
+    //             green.valor = image->pix[j * image->width + i].g & 0b00000010;
+    //             green2.valor = image->pix[j * image->width + i].g & 0b00000001;                
+    //             bitsImgDecodificada[countDecodifica+2] = green.valor;
+    //             bitsImgDecodificada[countDecodifica+3] = green2.valor;
+
+    //             blue.valor = image->pix[j * image->width + i].b & 0b00000010;
+    //             blue2.valor = image->pix[j * image->width + i].b & 0b00000001;                
+    //             bitsImgDecodificada[countDecodifica+4] = blue.valor;
+    //             bitsImgDecodificada[countDecodifica+5] = blue2.valor;
+
+    //             countDecodifica = countDecodifica+6;
+    //         }
+
+    //     }
+    // }
     //laço agora para formar a imagemm escondida a partir de seus bits
     
-    Img dataDecodificada;
-    Img *imageDecodificada = &dataDecodificada;
-    dataDecodificada.width = imageH->width;
-    dataDecodificada.height = imageH->height;
-    //imageDecodificada->pix = (Pixel *)malloc(sizeof(Pixel) * imageH->width * imageH->height);
+    // Img dataDecodificadaB;
+    // Img *imageDecodificada = &dataDecodificada;
+    // dataDecodificada.width = imageH->width;
+    // dataDecodificada.height = imageH->height;
+    // //imageDecodificada->pix = (Pixel *)malloc(sizeof(Pixel) * imageH->width * imageH->height);
 
-    Pixel pixelImgDecodificada;
-    int count = 0;
+    // Pixel pixelImgDecodificada;
+    // int count = 0;
     
-    unsigned char resultado = 0;
-    unsigned char bitPego;
-    int posicao = 0;
-    for(i=0; i<sizeof(bitsImgDecodificada); i++){
-        if(count<8){
-            bitPego = bitsImgDecodificada[i];
-            resultado = (resultado<<1) | bitPego;
-            if(count == 7){
-                pixelImgDecodificada.r = resultado;
-                resultado = 0;
-            }
-        
-        }
-        else if(count<16){
-            bitPego = bitsImgDecodificada[i];
-            resultado = (resultado<<1) | bitPego;
-            if(count == 15){
-                pixelImgDecodificada.g = resultado;
-                resultado = 0;
-            }
-        }
-        
-        else{
-            bitPego = bitsImgDecodificada[i];
-            resultado = (resultado<<1) | bitPego;
-            if(count == 23){
-                pixelImgDecodificada.b = resultado;
-                imageDecodificada->pix[posicao] = pixelImgDecodificada;
-                posicao++;
-                resultado = 0;
-
-
-            }
-        }
-        count++;
-        if(count == 24){
-            count = 0;
-        }
+    // unsigned char resultado = 0;
+    // unsigned char bitPego;
+    // int posicao = 0;
     
-    }
-    write_ppm("pf.ppm", imageDecodificada);
-    free_ppm(imageDecodificada);
+    // for(unsigned int ii =0; ii<sizeof(bitsImgDecodificada); ii++){
+    //     if(count<8){
+    //         bitPego = bitsImgDecodificada[ii];
+    //         resultado = (resultado<<1) | bitPego;
+    //         if(count == 7){
+    //             pixelImgDecodificada.r = resultado;
+    //             resultado = 0;
+    //         }
+        
+    //     }
+    //     else if(count<16){
+    //         bitPego = bitsImgDecodificada[ii];
+    //         resultado = (resultado<<1) | bitPego;
+    //         if(count == 15){
+    //             pixelImgDecodificada.g = resultado;
+    //             resultado = 0;
+    //         }
+    //     }
+        
+    //     else{
+    //         bitPego = bitsImgDecodificada[ii];
+    //         resultado = (resultado<<1) | bitPego;
+    //         if(count == 23){
+    //             pixelImgDecodificada.b = resultado;
+    //             imageDecodificada->pix[posicao] = pixelImgDecodificada;
+    //             posicao++;
+    //             resultado = 0;
 
-    printf("OIEEEEEEEE\n");
+
+    //         }
+    //     }
+    //     count++;
+    //     if(count == 24){
+    //         count = 0;
+    //     }
+    
+    // }
+    // write_ppm("pf.ppm", imageDecodificada);
+    // free_ppm(imageDecodificada);
+
+    printf("aaaaaaaaaa\n");
 
 
 

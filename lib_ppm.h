@@ -4,6 +4,14 @@
  * author:        Sergio Johann Filho <sergio.johann@acad.pucrs.br>
  */
 
+typedef struct{
+    unsigned int : 12;
+} Dimensao;
+
+typedef struct{
+    unsigned int val : 2;
+
+} valor2Bit;
 typedef struct {
     unsigned char r, g, b;
 } Pixel;
@@ -15,8 +23,10 @@ typedef struct {
 } Img;
 
 typedef struct {
-    unsigned int valor : 2;
+    unsigned int valor : 1;
 } valor1Bit;
+
+
 
 
 int read_ppm(char *file, Img *image);
