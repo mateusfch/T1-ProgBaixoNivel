@@ -72,9 +72,8 @@ int main()
 
                 while(count<4){
                     // verificar se não ultrapassa a largura da imagem maior, verificar se a altura passar tbm? ver dps, em vez de 1200 tem que deixar generico, como saber o tamanho da largura ??
-                    if(largura>larguraImgMaior){
+                    if(largura==image->width){
                         
-                        auxLargura = largura;
                         largura = 0;
                         altura++;
                     }
@@ -133,7 +132,7 @@ int main()
    
     int countt = 0;
     for(i=4; countt<(imageH->width * imageH->height*4); i++){
-        if(i>image->width){
+        if(i == image->width){
             j++;
             i = 0;
         }
@@ -159,8 +158,11 @@ int main()
     
 
     int size = sizeof(bitsImgDecodificada);
-    for(i=0; i<size; i = i + 4){
+    for(i=0; i<size;){
         Pixel p;
+        p.r = 0;
+        p.g = 0;
+        p.b = 0;
 
         while(countAux != 3){
 
@@ -168,12 +170,14 @@ int main()
                 canalR = ( bitsImgDecodificada[i] << 6) | ( bitsImgDecodificada[i+1] << 4) | (  bitsImgDecodificada[i+2] << 2) | ( bitsImgDecodificada[i+3]);
                 p.r = canalR;
                 countAux = 1;
+                 i = i + 4;
             }
 
             else if(countAux == 1){
                 canalG = (bitsImgDecodificada[i] << 6) | (bitsImgDecodificada[i+1] << 4) | (bitsImgDecodificada[i+2] << 2) | (bitsImgDecodificada[i+3]);
                 p.g = canalG;
                 countAux = 2;
+                 i = i + 4;
             }
 
             else if(countAux == 2){
@@ -183,6 +187,7 @@ int main()
                 pixelsImgDecodificada[countVetorPixels] = p;
                 countAux = 3;
                 countVetorPixels++;
+                 i = i + 4;
             }
         }
 
